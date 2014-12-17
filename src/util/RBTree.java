@@ -1,6 +1,8 @@
 package util;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class RBTree<V extends Comparable<V>> {
@@ -9,6 +11,7 @@ public class RBTree<V extends Comparable<V>> {
     private static final boolean BLACK = true;
     private int size = 0;
     private Node<V> root = null;
+    private ArrayList<V> traversingList = new ArrayList<V>();
 
     private static class Node<V> {
         int key;
@@ -97,17 +100,12 @@ public class RBTree<V extends Comparable<V>> {
     }
 
     private void addCaseFour(Node<V> node) {
-
         Node<V> grandparent = getGrandparent(node);
-
         if ((node == node.parent.right) && (node.parent == grandparent.left)) {
-            // rotateLeft(node.parent, grandparent);
-
 			/*
              * struct node *saved_p=g->left, *saved_left_n=n->left; g->left=n;
 			 * n->left=saved_p; saved_p->right=saved_left_n;
 			 */
-
             Node<V> saved_p = grandparent.left, saved_left_n = node.left;
             grandparent.left = node;
             grandparent.left.parent = grandparent;
@@ -119,13 +117,10 @@ public class RBTree<V extends Comparable<V>> {
             node = node.left;
         } else if ((node == node.parent.left)
                 && (node.parent == grandparent.right)) {
-            // rotateRight(node.parent, grandparent);
-
 			/*
              * struct node *saved_p=g->right, *saved_right_n=n->right;
 			 * g->right=n; n->right=saved_p; saved_p->left=saved_right_n;
 			 */
-
             Node<V> saved_p = grandparent.right, saved_right_n = node.right;
             grandparent.right = node;
             grandparent.right.parent = grandparent;
@@ -135,7 +130,6 @@ public class RBTree<V extends Comparable<V>> {
             if (saved_p.left != null)
                 saved_p.left.parent = saved_p;
             node = node.right;
-
         }
         addCaseFive(node);
     }
@@ -144,13 +138,6 @@ public class RBTree<V extends Comparable<V>> {
         Node<V> grandparent = getGrandparent(node);
 
         if ((node == node.parent.left) && (node.parent == grandparent.left)) {
-            // Node<V> saved_p = grandparent.right, saved_right_n = node.right;
-            // grandparent.right = node;
-            // // grandparent.right.parent = grandparent;
-            // node.right = saved_p;
-            // // node.right.parent = node;
-            // saved_p.left = saved_right_n;
-
             if (grandparent == root) {
                 root = grandparent.left;
                 if (root.right != null) {
@@ -169,14 +156,6 @@ public class RBTree<V extends Comparable<V>> {
                 leftRotate(node, grandparent);
             }
         } else {
-            // Node<V> saved_p = grandparent.left, saved_left_n = node.left;
-            // grandparent = grandparent.right;
-            // grandparent.left = grandparent;
-            // grandparent.left.parent = grandparent.right;
-            // node.left = saved_p;
-            // // node.left.parent = node;
-            // saved_p.right = saved_left_n;
-
             if (grandparent == root) {
                 root = grandparent.right;
                 if (root.left != null) {
@@ -307,18 +286,23 @@ public class RBTree<V extends Comparable<V>> {
         return size;
     }
 
-    public void preOrderTravers() {
+    public ArrayList<V> preOrderTravers() {
+        traversingList = new ArrayList<V>();
         preOrderTree(root);
+        return traversingList;
     }
 
-    public void inOrderTravers() {
+    public ArrayList<V> inOrderTravers() {
+        traversingList = new ArrayList<V>();
         inOrderTree(root);
+        return traversingList;
     }
 
     private void inOrderTree(Node<V> node) {
         if (null != node) {
             inOrderTree(node.left);
             System.out.println(node.value);
+            traversingList.add(node.value);
             inOrderTree(node.right);
         }
     }
@@ -326,26 +310,29 @@ public class RBTree<V extends Comparable<V>> {
     private void preOrderTree(Node<V> node) {
         if (null != node) {
             System.out.println(node.value);
+            traversingList.add(node.value);
             preOrderTree(node.left);
             preOrderTree(node.right);
         }
     }
 
-    public void fullSteck() {
-        int i = 0;
-        fullSteckTree(root, i);
+    int countCalls;
+    public int fullSteck() {
+        countCalls = 0;
+        fullSteckTree(root);
+        return countCalls;
     }
 
-    private void fullSteckTree(Node<V> node, int count) {
-        ++count;
+    private void fullSteckTree(Node<V> node) {
+        ++countCalls;
         try {
             if (null != node.parent) {
-                fullSteckTree(node.parent, count);
+                fullSteckTree(node.parent);
             } else {
-                fullSteckTree(node.left, count);
+                fullSteckTree(node.left);
             }
         } catch (StackOverflowError ex) {
-            System.out.println(count);
+            System.out.println(countCalls);
         }
     }
 }

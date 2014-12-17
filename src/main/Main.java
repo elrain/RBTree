@@ -25,10 +25,22 @@ public class Main {
 
 //		System.out.println(rbTree.get(4).getStudentId() + "\n\n");
 
+		RBTree<Integer> rbTree1 = new RBTree<Integer>();
+		rbTree1.add(13);
+		rbTree1.add(27);
+		rbTree1.add(1);
+		rbTree1.add(15);
+		rbTree1.add(17);
+		rbTree1.add(25);
+		rbTree1.add(8);
+		rbTree1.add(6);
+		rbTree1.add(27);
+		rbTree1.add(11);
+
 //		rbTree.preOrderTravers();
 //		System.out.println("\n");
-//		rbTree.inOrderTravers();
-//		rbTree.fullSteck();
+//		rbTree1.inOrderTravers();
+		System.out.println("\n" + rbTree.fullSteck());
 		
 	}
 	
