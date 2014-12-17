@@ -1,6 +1,7 @@
 package util;
 
-import objects.Student;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class RBTree<V extends Comparable<V>> {
 
@@ -8,7 +9,6 @@ public class RBTree<V extends Comparable<V>> {
     private static final boolean BLACK = true;
     private int size = 0;
     private Node<V> root = null;
-    private Node<V> nodeForSearch = null;
 
     private static class Node<V> {
         int key;
@@ -28,7 +28,6 @@ public class RBTree<V extends Comparable<V>> {
     public void add(V v) {
         Node<V> node = root, parent = null;
         while (null != node) {
-//            int compare = comparator.compare(v, node.value);
             int compare = v.compareTo(node.value);
             if (compare == 0) {
                 node.value = v;
@@ -51,12 +50,6 @@ public class RBTree<V extends Comparable<V>> {
         if (null == parent) {
             root = newNode;
         } else {
-//            if (newNode.key - parent.key < 0) {
-//                parent.left = newNode;
-//            } else {
-//                parent.right = newNode;
-//            }
-//            if (comparator.compare(newNode.value, parent.value) < 0) {
             if (newNode.value.compareTo(parent.value) < 0) {
                 parent.left = newNode;
             } else {
@@ -65,11 +58,10 @@ public class RBTree<V extends Comparable<V>> {
         }
 
         ++size;
-        // root = fixupAdd(root, newNode);
-        fixuppAdd(newNode);
+        fixupAdd(newNode);
     }
 
-    private void fixuppAdd(Node<V> node) {
+    private void fixupAdd(Node<V> node) {
         addCaseOne(node);
     }
 
@@ -174,21 +166,7 @@ public class RBTree<V extends Comparable<V>> {
                     root.right.left = null;
                 }
             } else {
-//				grandparent.left.right = grandparent;
-//				grandparent.left.parent = grandparent.parent;
-//				grandparent.parent = grandparent.left;
-//				grandparent.left = null;
-//				grandparent.parent.right = grandparent.left;
-//				grandparent.parent.right.right = grandparent.parent.right.parent;
-//				grandparent.parent.right.parent = grandparent.parent;
-//				grandparent.parent.right.right.left = null;
-//				grandparent.parent.right.right.parent = grandparent.parent.right;
-
-//				if(node == node.parent.left){
-//					rightRotate(node, grandparent);
-//				} else{
                 leftRotate(node, grandparent);
-//				}
             }
         } else {
             // Node<V> saved_p = grandparent.left, saved_left_n = node.left;
@@ -214,11 +192,6 @@ public class RBTree<V extends Comparable<V>> {
                     root.left.right = null;
                 }
             } else {
-//				grandparent.parent.left = grandparent.right;
-//				grandparent.parent.left.left = grandparent.parent.left.parent;
-//				grandparent.parent.left.parent = grandparent.parent;
-//				grandparent.parent.left.left.right = null;
-//				grandparent.parent.left.left.parent = grandparent.parent.left;
                 rightRotate(node, grandparent);
             }
         }
@@ -299,9 +272,36 @@ public class RBTree<V extends Comparable<V>> {
         }
     }
 
-//    public V get(int key) {
-//        return getNodeWithKey(root, key);
-//    }
+    public V get(int key) {
+        return getNode(key).value;
+    }
+
+    private Node<V> getNode(int key) {
+        if (root.key == key)
+            return root;
+        else {
+            Queue<Node<V>> queue = new LinkedList<Node<V>>();
+            if (null != root.left)
+                queue.add(root.left);
+            if (null != root.right)
+                queue.add(root.right);
+
+            while (!queue.isEmpty()) {
+                Node<V> node = queue.poll();
+                if (node.key == key) {
+                    queue = null;
+                    return node;
+                } else {
+                    if (null != node.left)
+                        queue.add(node.left);
+                    if (null != node.right)
+                        queue.add(node.right);
+                }
+            }
+        }
+
+        throw new IndexOutOfBoundsException("No item with index: " + key);
+    }
 
     public int size() {
         return size;
@@ -318,17 +318,14 @@ public class RBTree<V extends Comparable<V>> {
     private void inOrderTree(Node<V> node) {
         if (null != node) {
             inOrderTree(node.left);
-            System.out.println(((Student) node.value).getStudentId());
+            System.out.println(node.value);
             inOrderTree(node.right);
         }
     }
 
-//    private V getNodeWithKey(Node<V> node, int key) {
-//    }
-
     private void preOrderTree(Node<V> node) {
         if (null != node) {
-            System.out.println(node.key);
+            System.out.println(node.value);
             preOrderTree(node.left);
             preOrderTree(node.right);
         }
