@@ -29,18 +29,19 @@ public class Main {
 		rbTree1.add(13);
 		rbTree1.add(27);
 		rbTree1.add(1);
+		rbTree1.add(8);
+		rbTree1.add(11);
+		rbTree1.add(6);
 		rbTree1.add(15);
 		rbTree1.add(17);
 		rbTree1.add(25);
-		rbTree1.add(8);
-		rbTree1.add(6);
-		rbTree1.add(27);
-		rbTree1.add(11);
+		rbTree1.add(22);
 
-//		rbTree.preOrderTravers();
-//		System.out.println("\n");
-//		rbTree1.inOrderTravers();
-		System.out.println("\n" + rbTree.fullSteck());
+
+		rbTree1.preOrderTravers();
+		System.out.println("\n");
+		rbTree1.inOrderTravers();
+//		System.out.println("\n" + rbTree.fullSteck());
 		
 	}
 	

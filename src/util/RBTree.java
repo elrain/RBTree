@@ -298,6 +298,21 @@ public class RBTree<V extends Comparable<V>> {
         return traversingList;
     }
 
+    public ArrayList<V> postOrderTravers(){
+        traversingList = new ArrayList<V>();
+        postOrderTree(root);
+        return traversingList;
+    }
+
+    private void postOrderTree(Node<V> node) {
+        if(null != node){
+            postOrderTree(node.left);
+            postOrderTree(node.right);
+            System.out.println(node.value);
+            traversingList.add(node.value);
+        }
+    }
+
     private void inOrderTree(Node<V> node) {
         if (null != node) {
             inOrderTree(node.left);
