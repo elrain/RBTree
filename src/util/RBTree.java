@@ -332,19 +332,19 @@ public class RBTree<V extends Comparable<V>> {
     }
 
     int countCalls;
-    public int fullSteck() {
+    public int fullStack() {
         countCalls = 0;
-        fullSteckTree(root);
+        fullStackTree(root);
         return countCalls;
     }
 
-    private void fullSteckTree(Node<V> node) {
+    private void fullStackTree(Node<V> node) {
         ++countCalls;
         try {
             if (null != node.parent) {
-                fullSteckTree(node.parent);
+                fullStackTree(node.parent);
             } else {
-                fullSteckTree(node.left);
+                fullStackTree(node.left);
             }
         } catch (StackOverflowError ex) {
             System.out.println(countCalls);
